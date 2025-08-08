@@ -72,10 +72,10 @@
   - [x] 5.3 Add basic validation command (npx design-system-mcp validate) that outputs: token files found and categories discovered
   - [x] 5.4 Write unit tests for validation functionality
   
-- [ ] 6.0 Distribution & Documentation
-  - [ ] 6.1 Create clear README with simple setup process (copy examples, configure client)
-  - [ ] 6.2 Document how to replace sample tokens with team's actual design system
-  - [ ] 6.3 Document supported token creation workflows (Figma Tokens, Style Dictionary, etc.)
-  - [ ] 6.4 Add concrete before/after AI conversation examples showing value
-  - [ ] 6.5 Set up npm package publishing with proper bin entry points (validate, start)
-  - [ ] 6.6 Add MCP server entry point (bin/start.js) for `npx design-system-mcp start` used by AI clients
+- [X] 6.0 Distribution & Documentation
+  - [x] 6.1 Create clear README with simple setup process (copy examples, configure client)
+  - [x] 6.2 Document how to replace sample tokens with team's actual design system
+  - [x] 6.3 Document supported token creation workflows (Figma Tokens, Style Dictionary, etc.)
+  - [x] 6.4 Add concrete before/after AI conversation examples showing value
+  - [x] 6.5 Set up npm package publishing with proper bin entry points (validate, start)
+  - [X] 6.6 Add MCP server entry point (bin/start.js) for `npx design-system-mcp start` used by AI clients

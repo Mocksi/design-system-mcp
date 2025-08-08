@@ -316,7 +316,7 @@ Progressive flow: Use after get_category_tokens to get detailed information abou
       }
 
       // Format tokens for response
-      const tokens = categoryData.tokens.map(token => ({
+      const tokens = (categoryData?.tokens || []).map(token => ({
         name: token.name,
         path: token.path,
         value: token.value,
@@ -333,10 +333,10 @@ Progressive flow: Use after get_category_tokens to get detailed information abou
             text: JSON.stringify({
               success: true,
               category: {
-                name: categoryData.name,
+                name: categoryData?.name || category,
                 displayName: category.charAt(0).toUpperCase() + category.slice(1),
                 description: this.getCategoryDescription(category),
-                tokenCount: categoryData.totalCount,
+                tokenCount: categoryData?.totalCount ?? tokens.length,
               },
               tokens,
               nextSteps: [
@@ -374,27 +374,27 @@ Progressive flow: Use after get_category_tokens to get detailed information abou
         validateCategoryExists(category, availableCategories);
       }
 
-      const token = categoryData.tokens.find(t => t.name === name);
+      const token = categoryData?.tokens?.find(t => t.name === name);
 
       if (!token) {
-        const availableTokens = categoryData.tokens.map(t => t.name);
+        const availableTokens = (categoryData?.tokens || []).map(t => t.name);
         validateTokenExists(name, category, availableTokens);
       }
 
       // Build detailed token reference
       const tokenReference = {
-        name: token.name,
-        path: token.path,
+        name: token!.name,
+        path: token!.path,
         category: category,
-        value: token.value,
-        type: token.type,
-        description: token.description,
-        cssVariable: `--${token.name.replace(/\./g, '-')}`,
-        cssClass: `.${token.name.replace(/\./g, '-')}`,
-        sassVariable: `$${token.name.replace(/\./g, '-')}`,
-        usage: this.getTokenUsageHint(token.type, token.path),
-        examples: this.getTokenExamples(token.type, token.value, token.name),
-        relatedTokens: this.findRelatedTokens(token, categoryData.tokens),
+        value: token!.value,
+        type: token!.type,
+        description: token!.description,
+        cssVariable: `--${token!.name.replace(/\./g, '-')}`,
+        cssClass: `.${token!.name.replace(/\./g, '-')}`,
+        sassVariable: `$${token!.name.replace(/\./g, '-')}`,
+        usage: this.getTokenUsageHint(token!.type, token!.path),
+        examples: this.getTokenExamples(token!.type, token!.value, token!.name),
+        relatedTokens: this.findRelatedTokens(token!, categoryData!.tokens),
       };
 
       return {

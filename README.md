@@ -10,18 +10,39 @@ A focused Model Context Protocol server that prevents AI coding assistants from 
    ```
 
 2. **Copy sample tokens:**
+   - If installed globally via npm:
+     ```bash
+     cp -r $(npm root -g)/design-system-mcp/examples/tokens ./design-system-mcp/
+     ```
+   - If using this repository directly:
+     ```bash
+     cp -r ./examples/tokens ./design-system-mcp/
+     ```
+
+3. **Copy example client configs (optional, for quick start):**
    ```bash
-   cp -r node_modules/design-system-mcp/examples/tokens ./design-system-mcp/
+   # Claude Code (project root)
+   cp ./examples/mcp-configs/.mcp.json ./
+
+   # Cursor (project)
+   cp ./examples/mcp-configs/.cursor-mcp.json ./.cursor/mcp.json
+
+   # Claude Desktop (copy content into your platform-specific config file)
+   cat ./examples/mcp-configs/claude_desktop_config.json
    ```
 
-3. **Configure your AI client:**
+4. **Configure your AI client (paths overview):**
    - **Claude Code**: Add to `.mcp.json` at project root
    - **Claude Desktop**: Add to your platform's config file
    - **Cursor**: Add to `~/.cursor/mcp.json` or `.cursor/mcp.json`
 
-4. **Test the setup:**
+5. **Test the setup:**
    ```bash
    npx design-system-mcp validate
+   ```
+   Or with the bundled samples without copying them:
+   ```bash
+   DESIGN_TOKENS_PATH=./examples/tokens npx design-system-mcp validate
    ```
 
 ## MCP Client Configuration
@@ -130,9 +151,119 @@ design-system-mcp/tokens/
 
 ## Replacing Sample Tokens
 
-1. Replace the sample token files in `./design-system-mcp/tokens/` with your actual design system tokens
-2. Ensure your token files follow the W3C Design Token specification
-3. Run `npx design-system-mcp validate` to verify the setup
+Use this section when you’re ready to point the MCP at your team’s real tokens.
+
+### Where to put your tokens
+
+- Default location (recommended): `./design-system-mcp/tokens/`
+- Use a different folder by setting `DESIGN_TOKENS_PATH` in your client config or shell
+  - Example: `DESIGN_TOKENS_PATH=./path/to/your/tokens npx design-system-mcp validate`
+
+### Supported file layouts
+
+- Single file: `tokens.json` with multiple top‑level categories
+- Multiple files (recommended): one or more files per category, for example:
+  - `colors-primitives.json`, `colors-semantic.json`
+  - `typography.json`
+  - `spacing.json`
+  - `components.json`
+
+The server automatically discovers all `.json` files under the tokens directory and merges categories.
+
+### Required format (W3C Design Tokens)
+
+- Files must follow the W3C Design Token JSON format (latest community group spec)
+- Top‑level keys should be standard categories such as `colors`, `typography`, `spacing`, `components`, etc.
+
+Minimal examples:
+
+```json
+{
+  "colors": {
+    "primary": { "$type": "color", "$value": "#3b82f6" }
+  }
+}
+```
+
+```json
+{
+  "typography": {
+    "heading": {
+      "large": {
+        "$type": "typography",
+        "$value": { "fontFamily": "Inter", "fontSize": "32px", "fontWeight": 600, "lineHeight": "1.2" }
+      }
+    }
+  }
+}
+```
+
+### Using references/aliases
+
+- You can reference other tokens with `{path.to.token}` syntax, e.g. `"$value": "{colors.primary}"`
+- The server can optionally resolve references when returning category/token data
+
+### Common workflows
+
+- Figma Tokens / Tokens Studio: export to W3C JSON and copy into your tokens directory
+- Style Dictionary: output W3C-compatible JSON and direct output to your tokens directory
+- Manual JSON: follow the minimal examples above
+
+### Validate and troubleshoot
+
+1. Run: `npx design-system-mcp validate`
+2. Expect output like: `Token files found: N files in <path>` and `Categories discovered: ...`
+3. If none found, verify the directory and JSON validity or set `DESIGN_TOKENS_PATH`
+
+### Quick checklist
+
+- Tokens are in your selected directory (default `./design-system-mcp/tokens/`)
+- Files end with `.json` and contain valid JSON
+- Top‑level categories use standard names (`colors`, `typography`, `spacing`, `components`, ...)
+- Optional: references use `{...}` syntax and point to existing tokens
+- Validation shows files and expected categories
+
+## Supported Token Creation Workflows
+
+The MCP reads W3C Design Token JSON from your filesystem. Use any workflow that can output that format.
+
+### Figma Tokens / Tokens Studio
+
+1. Export your tokens as JSON in W3C format
+2. Copy the exported files into your tokens directory (default `./design-system-mcp/tokens/`)
+3. Validate:
+   ```bash
+   npx design-system-mcp validate
+   ```
+
+Notes:
+- Use `{path.to.token}` alias syntax to reference other tokens
+- Consider splitting primitives and semantic tokens into separate files
+
+### Style Dictionary
+
+1. Configure your Style Dictionary build to emit plain JSON aligned to W3C keys (`colors`, `typography`, `spacing`, `components`, ...)
+2. Output the build to a target directory, e.g. `./build/tokens`
+3. Point the MCP at that directory via env:
+   ```bash
+   DESIGN_TOKENS_PATH=./build/tokens npx design-system-mcp validate
+   ```
+
+Tips:
+- Keep aliases in output when possible (e.g. `"$value": "{colors.primary}"`)
+- If your output is platform-specific (e.g. CSS/TS), also emit a raw JSON target for the MCP
+
+### Design Token Studio
+
+1. Export tokens as W3C JSON
+2. Copy to your tokens directory or point `DESIGN_TOKENS_PATH` to the export location
+3. Validate with the command above
+
+### Manual JSON
+
+1. Create `.json` files with top‑level categories (`colors`, `typography`, `spacing`, `components`, ...)
+2. Follow the minimal examples in this README
+3. Validate and iterate
 
 ## Supported Token Creation Workflows
 

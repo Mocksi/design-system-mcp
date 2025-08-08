@@ -1,25 +1,38 @@
 #!/usr/bin/env node
-// Minimal CLI entry to support `npx design-system-mcp validate` for now.
-// `start` (MCP server) will be wired in a later task.
+// CLI entry for Design System MCP
 
 const args = process.argv.slice(2);
 
 async function run() {
-  const cmd = args[0] || 'start';
+  const cmd = (args[0] || 'start').toLowerCase();
 
   if (cmd === 'validate') {
-    // Defer to the validate script
-    const mod = await import(new URL('./validate.js', import.meta.url));
-    // If validate.js exports a main, call it; otherwise it already executed on import
-    if (mod && typeof mod.default === 'function') {
-      await mod.default();
-    }
+    // Delegate to validation script
+    await import(new URL('./validate.js', import.meta.url));
     return;
   }
 
-  // Placeholder until MCP server wiring is added in a later task
-  console.error('MCP server start command not yet implemented. Use `npx design-system-mcp validate` for now.');
-  process.exit(1);
+  if (cmd !== 'start') {
+    console.error(`Unknown command: ${cmd}. Use "start" or "validate".`);
+    process.exit(1);
+  }
+
+  // Try to load compiled server
+  try {
+    const mod = await import(new URL('../dist/server.js', import.meta.url));
+    if (mod && mod.DesignSystemMCPServer) {
+      const server = new mod.DesignSystemMCPServer();
+      await server.run();
+      return;
+    }
+    // If module auto-runs on import, just return
+    return;
+  } catch (err) {
+    console.error('[design-system-mcp] Could not load compiled server from dist/server.js');
+    console.error('Error:', err && err.message ? err.message : String(err));
+    console.error('Try running: npm run build  (or ensure you installed the published package)');
+    process.exit(1);
+  }
 }
 
 run().catch((err) => {

@@ -139,23 +139,25 @@ const TokenSchema = z.union([
   TokenReferenceSchema,
 ]);
 
-// Token group schema (recursive for nested groups)
+// Token group schema (recursive for nested groups), allowing metadata keys
 const TokenGroupSchema: z.ZodType<any> = z.lazy(() =>
-  z.record(
-    z.union([
-      TokenSchema,
-      TokenGroupSchema,
-    ])
-  )
+  z
+    .object({
+      $schema: z.string().optional(),
+      $type: TokenTypeSchema.optional(),
+      $description: z.string().optional(),
+      $extensions: z.record(z.any()).optional(),
+    })
+    .catchall(
+      z.union([
+        TokenSchema, // leaf tokens (including references)
+        TokenGroupSchema, // nested groups
+      ])
+    )
 );
 
 // Root design tokens file schema
-export const DesignTokensFileSchema = TokenGroupSchema.extend({
-  $schema: z.string().optional(),
-  $type: TokenTypeSchema.optional(),
-  $description: z.string().optional(),
-  $extensions: z.record(z.any()).optional(),
-});
+export const DesignTokensFileSchema = TokenGroupSchema;
 
 // Types exported for use in other modules
 export type TokenType = z.infer<typeof TokenTypeSchema>;
