@@ -1,0 +1,216 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/tokens.json",
+  "$type": "color",
+  "semantic": {
+    "primary": {
+      "50": {
+        "$value": "{primitives.blue.50}",
+        "$description": "Primary color lightest shade for backgrounds"
+      },
+      "100": {
+        "$value": "{primitives.blue.100}",
+        "$description": "Primary color very light for subtle backgrounds"
+      },
+      "200": {
+        "$value": "{primitives.blue.200}",
+        "$description": "Primary color light for hover states"
+      },
+      "300": {
+        "$value": "{primitives.blue.300}",
+        "$description": "Primary color medium light for borders"
+      },
+      "400": {
+        "$value": "{primitives.blue.400}",
+        "$description": "Primary color medium for disabled states"
+      },
+      "500": {
+        "$value": "{primitives.blue.500}",
+        "$description": "Primary color base for buttons and links"
+      },
+      "600": {
+        "$value": "{primitives.blue.600}",
+        "$description": "Primary color medium dark for hover states"
+      },
+      "700": {
+        "$value": "{primitives.blue.700}",
+        "$description": "Primary color dark for active states"
+      },
+      "800": {
+        "$value": "{primitives.blue.800}",
+        "$description": "Primary color very dark for text"
+      },
+      "900": {
+        "$value": "{primitives.blue.900}",
+        "$description": "Primary color darkest for high contrast text"
+      }
+    },
+    "error": {
+      "50": {
+        "$value": "{primitives.red.50}",
+        "$description": "Error color lightest shade for backgrounds"
+      },
+      "100": {
+        "$value": "{primitives.red.100}",
+        "$description": "Error color very light for alert backgrounds"
+      },
+      "200": {
+        "$value": "{primitives.red.200}",
+        "$description": "Error color light for borders"
+      },
+      "300": {
+        "$value": "{primitives.red.300}",
+        "$description": "Error color medium light for icons"
+      },
+      "400": {
+        "$value": "{primitives.red.400}",
+        "$description": "Error color medium for interactive elements"
+      },
+      "500": {
+        "$value": "{primitives.red.500}",
+        "$description": "Error color base for buttons and alerts"
+      },
+      "600": {
+        "$value": "{primitives.red.600}",
+        "$description": "Error color medium dark for hover states"
+      },
+      "700": {
+        "$value": "{primitives.red.700}",
+        "$description": "Error color dark for active states"
+      },
+      "800": {
+        "$value": "{primitives.red.800}",
+        "$description": "Error color very dark for text"
+      },
+      "900": {
+        "$value": "{primitives.red.900}",
+        "$description": "Error color darkest for high contrast text"
+      }
+    },
+    "success": {
+      "50": {
+        "$value": "{primitives.green.50}",
+        "$description": "Success color lightest shade for backgrounds"
+      },
+      "100": {
+        "$value": "{primitives.green.100}",
+        "$description": "Success color very light for alert backgrounds"
+      },
+      "200": {
+        "$value": "{primitives.green.200}",
+        "$description": "Success color light for borders"
+      },
+      "300": {
+        "$value": "{primitives.green.300}",
+        "$description": "Success color medium light for icons"
+      },
+      "400": {
+        "$value": "{primitives.green.400}",
+        "$description": "Success color medium for interactive elements"
+      },
+      "500": {
+        "$value": "{primitives.green.500}",
+        "$description": "Success color base for buttons and alerts"
+      },
+      "600": {
+        "$value": "{primitives.green.600}",
+        "$description": "Success color medium dark for hover states"
+      },
+      "700": {
+        "$value": "{primitives.green.700}",
+        "$description": "Success color dark for active states"
+      },
+      "800": {
+        "$value": "{primitives.green.800}",
+        "$description": "Success color very dark for text"
+      },
+      "900": {
+        "$value": "{primitives.green.900}",
+        "$description": "Success color darkest for high contrast text"
+      }
+    },
+    "warning": {
+      "50": {
+        "$value": "{primitives.yellow.50}",
+        "$description": "Warning color lightest shade for backgrounds"
+      },
+      "100": {
+        "$value": "{primitives.yellow.100}",
+        "$description": "Warning color very light for alert backgrounds"
+      },
+      "200": {
+        "$value": "{primitives.yellow.200}",
+        "$description": "Warning color light for borders"
+      },
+      "300": {
+        "$value": "{primitives.yellow.300}",
+        "$description": "Warning color medium light for icons"
+      },
+      "400": {
+        "$value": "{primitives.yellow.400}",
+        "$description": "Warning color medium for interactive elements"
+      },
+      "500": {
+        "$value": "{primitives.yellow.500}",
+        "$description": "Warning color base for buttons and alerts"
+      },
+      "600": {
+        "$value": "{primitives.yellow.600}",
+        "$description": "Warning color medium dark for hover states"
+      },
+      "700": {
+        "$value": "{primitives.yellow.700}",
+        "$description": "Warning color dark for active states"
+      },
+      "800": {
+        "$value": "{primitives.yellow.800}",
+        "$description": "Warning color very dark for text"
+      },
+      "900": {
+        "$value": "{primitives.yellow.900}",
+        "$description": "Warning color darkest for high contrast text"
+      }
+    },
+    "neutral": {
+      "50": {
+        "$value": "{primitives.gray.50}",
+        "$description": "Neutral color lightest shade for backgrounds"
+      },
+      "100": {
+        "$value": "{primitives.gray.100}",
+        "$description": "Neutral color very light for subtle backgrounds"
+      },
+      "200": {
+        "$value": "{primitives.gray.200}",
+        "$description": "Neutral color light for borders and dividers"
+      },
+      "300": {
+        "$value": "{primitives.gray.300}",
+        "$description": "Neutral color medium light for disabled elements"
+      },
+      "400": {
+        "$value": "{primitives.gray.400}",
+        "$description": "Neutral color medium for placeholders"
+      },
+      "500": {
+        "$value": "{primitives.gray.500}",
+        "$description": "Neutral color base for secondary text"
+      },
+      "600": {
+        "$value": "{primitives.gray.600}",
+        "$description": "Neutral color medium dark for body text"
+      },
+      "700": {
+        "$value": "{primitives.gray.700}",
+        "$description": "Neutral color dark for headings"
+      },
+      "800": {
+        "$value": "{primitives.gray.800}",
+        "$description": "Neutral color very dark for primary text"
+      },
+      "900": {
+        "$value": "{primitives.gray.900}",
+        "$description": "Neutral color darkest for high contrast text"
+      }
+    }
+  }
+}

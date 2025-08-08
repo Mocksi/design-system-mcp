@@ -1,0 +1,244 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/tokens.json",
+  "components": {
+    "button": {
+      "primary": {
+        "background": {
+          "$type": "color",
+          "$value": "{semantic.primary.500}",
+          "$description": "Primary button background color"
+        },
+        "backgroundHover": {
+          "$type": "color", 
+          "$value": "{semantic.primary.600}",
+          "$description": "Primary button hover background color"
+        },
+        "backgroundActive": {
+          "$type": "color",
+          "$value": "{semantic.primary.700}",
+          "$description": "Primary button active background color"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#ffffff",
+          "$description": "Primary button text color"
+        },
+        "borderRadius": {
+          "$type": "dimension",
+          "$value": "0.5rem",
+          "$description": "Primary button border radius"
+        },
+        "paddingX": {
+          "$type": "dimension",
+          "$value": "{spacing.4}",
+          "$description": "Primary button horizontal padding"
+        },
+        "paddingY": {
+          "$type": "dimension",
+          "$value": "{spacing.2}",
+          "$description": "Primary button vertical padding"
+        }
+      },
+      "secondary": {
+        "background": {
+          "$type": "color",
+          "$value": "transparent",
+          "$description": "Secondary button background color"
+        },
+        "backgroundHover": {
+          "$type": "color",
+          "$value": "{semantic.neutral.50}",
+          "$description": "Secondary button hover background color"
+        },
+        "backgroundActive": {
+          "$type": "color",
+          "$value": "{semantic.neutral.100}",
+          "$description": "Secondary button active background color"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{semantic.primary.600}",
+          "$description": "Secondary button text color"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.primary.300}",
+          "$description": "Secondary button border color"
+        },
+        "borderRadius": {
+          "$type": "dimension",
+          "$value": "0.5rem",
+          "$description": "Secondary button border radius"
+        },
+        "paddingX": {
+          "$type": "dimension",
+          "$value": "{spacing.4}",
+          "$description": "Secondary button horizontal padding"
+        },
+        "paddingY": {
+          "$type": "dimension",
+          "$value": "{spacing.2}",
+          "$description": "Secondary button vertical padding"
+        }
+      }
+    },
+    "card": {
+      "background": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Card background color"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{semantic.neutral.200}",
+        "$description": "Card border color"
+      },
+      "borderRadius": {
+        "$type": "dimension",
+        "$value": "0.75rem",
+        "$description": "Card border radius"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "{spacing.6}",
+        "$description": "Card internal padding"
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": {
+          "offsetX": "0",
+          "offsetY": "1px",
+          "blur": "3px",
+          "spread": "0",
+          "color": "rgba(0, 0, 0, 0.1)"
+        },
+        "$description": "Card drop shadow"
+      }
+    },
+    "input": {
+      "background": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Input field background color"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{semantic.neutral.300}",
+        "$description": "Input field border color"
+      },
+      "borderFocus": {
+        "$type": "color",
+        "$value": "{semantic.primary.500}",
+        "$description": "Input field focus border color"
+      },
+      "borderError": {
+        "$type": "color",
+        "$value": "{semantic.error.500}",
+        "$description": "Input field error border color"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{semantic.neutral.800}",
+        "$description": "Input field text color"
+      },
+      "placeholder": {
+        "$type": "color",
+        "$value": "{semantic.neutral.400}",
+        "$description": "Input field placeholder text color"
+      },
+      "borderRadius": {
+        "$type": "dimension",
+        "$value": "0.375rem",
+        "$description": "Input field border radius"
+      },
+      "paddingX": {
+        "$type": "dimension",
+        "$value": "{spacing.3}",
+        "$description": "Input field horizontal padding"
+      },
+      "paddingY": {
+        "$type": "dimension",
+        "$value": "{spacing.2}",
+        "$description": "Input field vertical padding"
+      }
+    },
+    "alert": {
+      "success": {
+        "background": {
+          "$type": "color",
+          "$value": "{semantic.success.50}",
+          "$description": "Success alert background color"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.success.200}",
+          "$description": "Success alert border color"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{semantic.success.800}",
+          "$description": "Success alert text color"
+        },
+        "icon": {
+          "$type": "color",
+          "$value": "{semantic.success.400}",
+          "$description": "Success alert icon color"
+        }
+      },
+      "error": {
+        "background": {
+          "$type": "color",
+          "$value": "{semantic.error.50}",
+          "$description": "Error alert background color"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.error.200}",
+          "$description": "Error alert border color"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{semantic.error.800}",
+          "$description": "Error alert text color"
+        },
+        "icon": {
+          "$type": "color",
+          "$value": "{semantic.error.400}",
+          "$description": "Error alert icon color"
+        }
+      },
+      "warning": {
+        "background": {
+          "$type": "color",
+          "$value": "{semantic.warning.50}",
+          "$description": "Warning alert background color"
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{semantic.warning.200}",
+          "$description": "Warning alert border color"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{semantic.warning.800}",
+          "$description": "Warning alert text color"
+        },
+        "icon": {
+          "$type": "color",
+          "$value": "{semantic.warning.400}",
+          "$description": "Warning alert icon color"
+        }
+      },
+      "borderRadius": {
+        "$type": "dimension",
+        "$value": "0.5rem",
+        "$description": "Alert border radius"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "{spacing.4}",
+        "$description": "Alert internal padding"
+      }
+    }
+  }
+}
