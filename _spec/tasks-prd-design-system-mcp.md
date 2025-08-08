@@ -44,13 +44,13 @@
   - [x] 1.5 Create basic project directory structure (src/, examples/)
   - [x] 1.6 Set up GitHub repository with clear README
   
-- [ ] 2.0 W3C Design Token Parser & Validator
-  - [ ] 2.1 Implement W3C Design Token JSON schema validation using Zod (latest specification)
-  - [ ] 2.2 Create token file parser that handles multiple files and merges token categories
-  - [ ] 2.3 Build token categorization logic (colors, typography, spacing, etc.)
-  - [ ] 2.4 Implement token reference resolution (aliases and $value references)
-  - [ ] 2.5 Add comprehensive error handling for malformed token files
-  - [ ] 2.6 Write unit tests covering all token parsing scenarios
+- [x] 2.0 W3C Design Token Parser & Validator
+  - [x] 2.1 Implement W3C Design Token JSON schema validation using Zod (latest specification)
+  - [x] 2.2 Create token file parser that handles multiple files and merges token categories
+  - [x] 2.3 Build token categorization logic (colors, typography, spacing, etc.)
+  - [x] 2.4 Implement token reference resolution (aliases and $value references)
+  - [x] 2.5 Add comprehensive error handling for malformed token files
+  - [x] 2.6 Write unit tests covering all token parsing scenarios
   
 - [ ] 3.0 Token File Management
   - [ ] 3.1 Implement token directory scanning and multi-file loading (scans ./tokens/*.json)
