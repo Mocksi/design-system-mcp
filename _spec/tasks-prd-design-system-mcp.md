@@ -52,10 +52,10 @@
   - [x] 2.5 Add comprehensive error handling for malformed token files
   - [x] 2.6 Write unit tests covering all token parsing scenarios
   
-- [ ] 3.0 Token File Management
-  - [ ] 3.1 Implement token directory scanning and multi-file loading (scans ./tokens/*.json)
-  - [ ] 3.2 Handle missing/corrupted files with helpful error messages
-  - [ ] 3.3 Write tests for all file management scenarios including multiple files per category
+- [x] 3.0 Token File Management
+  - [x] 3.1 Implement token directory scanning and multi-file loading (scans ./tokens/*.json)
+  - [x] 3.2 Handle missing/corrupted files with helpful error messages
+  - [x] 3.3 Write tests for all file management scenarios including multiple files per category
   
 - [ ] 4.0 MCP Server Implementation (Three-Layer Architecture)
   - [ ] 4.1 Set up basic MCP server with stdio transport
