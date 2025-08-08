@@ -66,11 +66,11 @@
   - [x] 4.6 Implement error handling and validation across all tools
   - [x] 4.7 Write comprehensive unit tests for each MCP tool
   
-- [ ] 5.0 Developer Onboarding
-  - [ ] 5.1 Bundle sample W3C Design Token files in repository organized by category (colors-primitives.json, colors-semantic.json, typography.json, spacing.json, components.json)
-  - [ ] 5.2 Create example MCP client configuration files: Claude Code (.mcp.json), Claude Desktop (claude_desktop_config.json), Cursor (.cursor/mcp.json)
-  - [ ] 5.3 Add basic validation command (npx design-system-mcp validate) that outputs: token files found and categories discovered
-  - [ ] 5.4 Write unit tests for validation functionality
+- [x] 5.0 Developer Onboarding
+  - [X] 5.1 Bundle sample W3C Design Token files in repository organized by category (colors-primitives.json, colors-semantic.json, typography.json, spacing.json, components.json)
+  - [x] 5.2 Create example MCP client configuration files: Claude Code (.mcp.json), Claude Desktop (claude_desktop_config.json), Cursor (.cursor/mcp.json)
+  - [x] 5.3 Add basic validation command (npx design-system-mcp validate) that outputs: token files found and categories discovered
+  - [x] 5.4 Write unit tests for validation functionality
   
 - [ ] 6.0 Distribution & Documentation
   - [ ] 6.1 Create clear README with simple setup process (copy examples, configure client)

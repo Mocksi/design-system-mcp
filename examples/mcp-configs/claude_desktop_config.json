@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "design_system": {
+      "command": "npx",
+      "args": ["design-system-mcp", "start"],
+      "env": {
+        "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens"
+      }
+    }
+  }
+}
+
