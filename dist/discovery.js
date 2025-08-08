@@ -1,6 +1,6 @@
 import { readdirSync, statSync, existsSync } from 'fs';
 import { join, resolve, extname } from 'path';
-import { parseMultipleTokenFiles } from './parsers/w3c-tokens';
+import { parseMultipleTokenFiles } from './parsers/w3c-tokens.js';
 export class TokenFileDiscovery {
     tokenDirectory;
     defaultTokensPath = './design-system-mcp/tokens';

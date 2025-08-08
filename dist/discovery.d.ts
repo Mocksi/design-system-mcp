@@ -1,4 +1,4 @@
-import { type ParsedTokensResult } from './parsers/w3c-tokens';
+import { type ParsedTokensResult } from './parsers/w3c-tokens.js';
 export interface TokenFileInfo {
     path: string;
     name: string;

@@ -1,6 +1,6 @@
 import { readdirSync, statSync, existsSync } from 'fs';
 import { join, resolve, extname } from 'path';
-import { parseMultipleTokenFiles, type ParsedTokensResult } from './parsers/w3c-tokens';
+import { parseMultipleTokenFiles, type ParsedTokensResult } from './parsers/w3c-tokens.js';
 
 export interface TokenFileInfo {
   path: string;
