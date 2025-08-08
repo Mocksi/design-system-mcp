@@ -1,0 +1,1 @@
+FYI .mcp.json and .cursor-mcp are hidden files
