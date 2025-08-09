@@ -89,6 +89,7 @@ export async function getDesignSystemInfo(args: DesignSystemInfoArgs): Promise<D
     const nextSteps = [
       'Use get_category_tokens to explore tokens in a specific category',
       'Use get_token_reference to get detailed information about specific tokens',
+      'Copy CSS variables or values to use in your code',
     ];
 
     if (result.parsedResult.categories.length > 0) {

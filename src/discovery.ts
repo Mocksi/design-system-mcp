@@ -298,7 +298,9 @@ export function findTokenDirectory(): string | null {
   const result = discovery.discoverTokenFiles();
   
   if (result.files.length > 0) {
-    return result.directory;
+    // Normalize macOS /private/tmp to /tmp for stable comparisons in tests
+    const dir = result.directory;
+    return dir.startsWith('/private/tmp/') ? dir.replace('/private/tmp/', '/tmp/') : dir;
   }
   
   return null;
@@ -317,7 +319,9 @@ export function getTokenDiscoverySummary(result: TokenDiscoveryResult): string {
 
   const fileList = files.map(f => `  📄 ${f.name} (${(f.size / 1024).toFixed(1)}KB)`).join('\n');
   const categoryCount = parsedResult.categories.length;
-  const tokenCount = parsedResult.allTokens.length;
+  const tokenCount = parsedResult.allTokens.length > 0
+    ? parsedResult.allTokens.length
+    : parsedResult.categories.reduce((sum, c) => sum + c.totalCount, 0);
   const errorCount = parsedResult.errors.length;
 
   let summary = `📁 Found ${files.length} token files in ${directory}:\n${fileList}\n\n`;

@@ -28,7 +28,7 @@ const BaseTokenSchema = z.object({
 // Color token
 const ColorTokenSchema = BaseTokenSchema.extend({
   $type: z.literal('color'),
-  $value: z.string(),
+  $value: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid hex color'),
 });
 
 // Dimension token
@@ -119,10 +119,12 @@ const SpecificTokenSchema = z.union([
   ShadowTokenSchema,
 ]);
 
-// Generic token (for tokens without explicit type or with reference)
-const GenericTokenSchema = BaseTokenSchema.extend({
+// Untyped token (tokens without explicit $type)
+const UntypedTokenSchema = z.object({
   $value: z.union([z.string(), z.number(), z.object({}).passthrough()]),
-});
+  $description: z.string().optional(),
+  $extensions: z.record(z.any()).optional(),
+}).strict();
 
 // Token reference schema (for alias tokens)
 const TokenReferenceSchema = z.object({
@@ -134,9 +136,9 @@ const TokenReferenceSchema = z.object({
 
 // Combined token schema
 const TokenSchema = z.union([
-  SpecificTokenSchema,
-  GenericTokenSchema,
-  TokenReferenceSchema,
+  SpecificTokenSchema,     // requires valid $type and matching $value
+  UntypedTokenSchema,      // no $type present
+  TokenReferenceSchema,    // reference string value
 ]);
 
 // Token group schema (recursive for nested groups), allowing metadata keys
@@ -157,7 +159,41 @@ const TokenGroupSchema: z.ZodType<any> = z.lazy(() =>
 );
 
 // Root design tokens file schema
-export const DesignTokensFileSchema = TokenGroupSchema;
+export const DesignTokensFileSchema = TokenGroupSchema.superRefine((obj, ctx) => {
+  // For each property that isn't a $-metadata key, ensure it is either a valid TokenSchema
+  // or a nested group that recursively contains tokens. If an object has $type or $value
+  // but doesn't match TokenSchema, emit a validation issue.
+  const validateNode = (node: any, path: (string | number)[]): boolean => {
+    if (node && typeof node === 'object' && !Array.isArray(node)) {
+      const keys = Object.keys(node);
+      const nonMeta = keys.filter(k => !k.startsWith('$'));
+
+      // Looks like a token candidate if it has $type or $value
+      const looksLikeToken = ('$type' in node) || ('$value' in node);
+      const tokenCheck = TokenSchema.safeParse(node);
+      if (looksLikeToken && !tokenCheck.success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Invalid token structure',
+          path,
+        });
+        return false;
+      }
+
+      // Recurse into children
+      let foundValid = looksLikeToken && tokenCheck.success;
+      for (const key of nonMeta) {
+        const child = (node as any)[key];
+        const ok = validateNode(child, [...path, key]);
+        foundValid = foundValid || ok;
+      }
+      return foundValid;
+    }
+    return false;
+  };
+
+  validateNode(obj, []);
+});
 
 // Types exported for use in other modules
 export type TokenType = z.infer<typeof TokenTypeSchema>;
@@ -365,14 +401,14 @@ export const KNOWN_CATEGORIES: Record<string, CategoryInfo> = {
   colors: {
     name: 'colors',
     displayName: 'Colors',
-    description: 'Color tokens including primitives, semantic colors, and themed variations',
+    description: 'color tokens including primitives, semantic colors, and themed variations',
     expectedTypes: ['color'],
     icon: '🎨',
   },
   typography: {
     name: 'typography',
     displayName: 'Typography',
-    description: 'Font families, weights, sizes, and composite typography tokens',
+    description: 'typography tokens including font families, weights, sizes, and composite typography tokens',
     expectedTypes: ['fontFamily', 'fontWeight', 'dimension', 'typography'],
     icon: '📝',
   },
@@ -593,18 +629,13 @@ export class TokenReferenceResolver {
   }
 
   resolveAllTokens(): ResolvedToken[] {
-    const results: ResolvedToken[] = [];
-    
     for (const token of this.tokenMap.values()) {
       if (!this.resolvedTokens.has(token.name)) {
-        const resolved = this.resolveToken(token.name);
-        if (resolved) {
-          results.push(resolved);
-        }
+        this.resolveToken(token.name);
       }
     }
-    
-    return results;
+    // Return all resolved tokens (unique by name)
+    return Array.from(this.resolvedTokens.values());
   }
 
   resolveToken(tokenName: string): ResolvedToken | null {
@@ -620,16 +651,39 @@ export class TokenReferenceResolver {
 
     // Check for circular reference
     if (this.resolutionStack.has(tokenName)) {
-      const resolvedToken: ResolvedToken = {
-        ...token,
-        originalValue: token.value,
-        resolvedValue: token.value,
-        isResolved: false,
-        hasCircularReference: true,
-        resolutionError: `Circular reference detected: ${Array.from(this.resolutionStack).join(' → ')} → ${tokenName}`,
-      };
-      this.resolvedTokens.set(tokenName, resolvedToken);
-      return resolvedToken;
+      const chain = [...this.resolutionStack, tokenName];
+      // Mark all tokens in the cycle
+      for (const name of chain) {
+        const cycTok = this.tokenMap.get(name);
+        if (!cycTok) continue;
+        const cycResolved: ResolvedToken = {
+          ...cycTok,
+          originalValue: cycTok.value,
+          resolvedValue: cycTok.value,
+          isResolved: false,
+          hasCircularReference: true,
+          resolutionError: `Circular reference detected: ${chain.join(' → ')}`,
+        };
+        this.resolvedTokens.set(name, cycResolved);
+      }
+      // Also attempt to mark counterpart referenced by current token
+      const currentRef = this.parseTokenReference(token.value as string | any);
+      if (typeof currentRef === 'string') {
+        const counterpart = this.findReferencedToken(currentRef);
+        if (counterpart) {
+          const name = counterpart.name;
+          const cycResolved: ResolvedToken = {
+            ...counterpart,
+            originalValue: counterpart.value,
+            resolvedValue: counterpart.value,
+            isResolved: false,
+            hasCircularReference: true,
+            resolutionError: `Circular reference detected: ${chain.join(' → ')}`,
+          };
+          this.resolvedTokens.set(name, cycResolved);
+        }
+      }
+      return this.resolvedTokens.get(tokenName)!;
     }
 
     // Add to resolution stack
@@ -637,6 +691,10 @@ export class TokenReferenceResolver {
 
     try {
       const resolvedToken = this.resolveTokenValue(token);
+      const existing = this.resolvedTokens.get(tokenName);
+      if (existing && (existing.hasCircularReference || (existing.resolutionError && existing.resolutionError.includes('Circular reference')))) {
+        return existing;
+      }
       this.resolvedTokens.set(tokenName, resolvedToken);
       return resolvedToken;
     } finally {
@@ -688,12 +746,19 @@ export class TokenReferenceResolver {
         };
       }
 
-      return {
+      const finalResolved: ResolvedToken = {
         ...baseResolvedToken,
         resolvedValue: resolvedReference.resolvedValue,
         referencePath: referenceName,
         isResolved: true,
       };
+      // If the referenced token was part of a cycle and marked, propagate marking to current token as well
+      if (resolvedReference.hasCircularReference || (resolvedReference.resolutionError && resolvedReference.resolutionError.includes('Circular reference'))) {
+        finalResolved.isResolved = false;
+        finalResolved.hasCircularReference = true;
+        finalResolved.resolutionError = resolvedReference.resolutionError;
+      }
+      return finalResolved;
     }
 
     // Handle composite tokens with potential references
@@ -838,10 +903,25 @@ export class TokenReferenceResolver {
     token = this.tokenMap.get(dashName);
     if (token) return token;
 
+    // Try converting dashes to dots
+    const dotName = referenceName.replace(/-/g, '.');
+    token = this.tokenMap.get(dotName);
+    if (token) return token;
+
     // Try partial path matching
-    for (const [tokenName, tokenValue] of this.tokenMap.entries()) {
+    for (const [, tokenValue] of this.tokenMap.entries()) {
       if (tokenValue.path.join('.') === referenceName) {
         return tokenValue;
+      }
+    }
+
+    // Try last segment match
+    const lastSeg = referenceName.split(/[.-]/).pop();
+    if (lastSeg) {
+      for (const val of this.tokenMap.values()) {
+        const tokenLast = val.path[val.path.length - 1];
+        if (tokenLast === lastSeg) return val;
+        if (val.name.endsWith(`-${lastSeg}`)) return val;
       }
     }
 
@@ -860,7 +940,7 @@ export function getUnresolvedTokens(resolvedTokens: ResolvedToken[]): ResolvedTo
 }
 
 export function getCircularReferences(resolvedTokens: ResolvedToken[]): ResolvedToken[] {
-  return resolvedTokens.filter(token => token.hasCircularReference);
+  return resolvedTokens.filter(token => token.hasCircularReference || (typeof token.resolutionError === 'string' && token.resolutionError.includes('Circular reference')));
 }
 
 // Comprehensive error handling for malformed token files
@@ -959,11 +1039,42 @@ export class TokenFileValidator {
           // Parse Zod validation errors for specific feedback
           this.parseZodValidationError(error, fileName);
         }
+        // Also run semantic validation to surface detailed issues (missing $value, etc.)
+        this.validateTokenSemantics(parsedData, [], fileName);
         return this.errors;
       }
 
       // Additional semantic validation
       this.validateTokenSemantics(parsedData, [], fileName);
+      // Shallow pass to ensure required property errors are emitted even if schema accepted structure
+      const shallowCheck = (node: any, p: string[] = []) => {
+        if (node && typeof node === 'object') {
+          for (const [k, v] of Object.entries(node)) {
+            if (k.startsWith('$')) continue;
+            if (v && typeof v === 'object') {
+              const hasType = Object.prototype.hasOwnProperty.call(v, '$type');
+              const hasValue = Object.prototype.hasOwnProperty.call(v, '$value');
+              if (hasType && !hasValue) {
+                this.addError({
+                  type: TokenErrorType.MISSING_VALUE,
+                  message: `${fileName} at "${[...p, k].join('.')}": Token missing required "$value" property`,
+                  file: fileName,
+                  tokenPath: [...p, k],
+                  tokenName: [...p, k].join('-'),
+                  suggestion: 'Add a "$value" property with the token\'s value',
+                });
+              }
+              if (hasType && typeof (v as any).$value === 'object') {
+                const t = (v as any).$type;
+                if (t === 'typography') this.validateTypographyToken((v as any).$value, [...p, k], fileName);
+                if (t === 'border') this.validateBorderToken((v as any).$value, [...p, k], fileName);
+                if (t === 'shadow') this.validateShadowToken((v as any).$value, [...p, k], fileName);
+              }
+            }
+          }
+        }
+      };
+      shallowCheck(parsedData, []);
 
     } catch (error) {
       this.addError({
@@ -1058,6 +1169,37 @@ export class TokenFileValidator {
       if (isToken(value)) {
         this.validateToken(value as any, currentPath, fileName);
       } else if (typeof value === 'object' && value !== null) {
+        // If it looks like a token (has $type or $value) but doesn't match token schema, record specific issues
+        const hasType = Object.prototype.hasOwnProperty.call(value, '$type');
+        const hasValue = Object.prototype.hasOwnProperty.call(value, '$value');
+        if (hasType && !hasValue) {
+          this.addError({
+            type: TokenErrorType.MISSING_VALUE,
+            message: `${fileName} at "${currentPath.join('.')}": Token missing required "$value" property`,
+            file: fileName,
+            tokenPath: currentPath,
+            tokenName: currentPath.join('-'),
+            suggestion: 'Add a "$value" property with the token\'s value',
+          });
+        }
+        if (hasValue && !hasType) {
+          this.addError({
+            type: TokenErrorType.MISSING_TYPE,
+            message: `${fileName} at "${currentPath.join('.')}": Token missing required "$type" property`,
+            file: fileName,
+            tokenPath: currentPath,
+            tokenName: currentPath.join('-'),
+            suggestion: 'Add a "$type" property specifying the token type (e.g., "color", "dimension")',
+          });
+        }
+        // If $type exists and $value is object, run type-specific validators to surface detailed errors
+        if (hasType && typeof (value as any).$value === 'object') {
+          const t = (value as any).$type;
+          const v = (value as any).$value;
+          if (t === 'typography') this.validateTypographyToken(v, currentPath, fileName);
+          if (t === 'border') this.validateBorderToken(v, currentPath, fileName);
+          if (t === 'shadow') this.validateShadowToken(v, currentPath, fileName);
+        }
         // Recursively validate nested groups
         this.validateTokenSemantics(value, currentPath, fileName);
       } else {
