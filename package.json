@@ -1,6 +1,6 @@
 {
   "name": "design-system-mcp",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A focused Model Context Protocol server that prevents AI coding assistants from hallucinating design tokens by providing direct access to W3C Design Token JSON files.",
   "type": "module",
   "main": "dist/server.js",

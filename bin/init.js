@@ -8,11 +8,23 @@ import { existsSync, mkdirSync, cpSync } from 'fs';
 import { resolve, join } from 'path';
 
 function findExamplesPath() {
-  // Simple: examples are bundled with the installed package
-  const examplesPath = resolve(process.argv[1], '../examples/tokens');
+  // For global installs, the binary is usually a symlink to the real location
+  // /opt/homebrew/bin/design-system-mcp -> /opt/homebrew/lib/node_modules/design-system-mcp/bin/start.js
+  // We want: /opt/homebrew/lib/node_modules/design-system-mcp/examples/tokens
   
-  if (existsSync(examplesPath)) {
-    return examplesPath;
+  const possiblePaths = [
+    // From bin/start.js to examples/tokens
+    resolve(process.argv[1], '../examples/tokens'),
+    // From symlinked location, try to find the real package
+    resolve(process.argv[1], '../../lib/node_modules/design-system-mcp/examples/tokens'),
+    // Alternative global locations
+    resolve(process.argv[1], '../../../design-system-mcp/examples/tokens'),
+  ];
+  
+  for (const path of possiblePaths) {
+    if (existsSync(path)) {
+      return path;
+    }
   }
   
   return null;
