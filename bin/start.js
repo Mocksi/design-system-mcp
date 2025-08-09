@@ -12,8 +12,14 @@ async function run() {
     return;
   }
 
+  if (cmd === 'init') {
+    // Delegate to init script
+    await import(new URL('./init.js', import.meta.url));
+    return;
+  }
+
   if (cmd !== 'start') {
-    console.error(`Unknown command: ${cmd}. Use "start" or "validate".`);
+    console.error(`Unknown command: ${cmd}. Use "start", "init", or "validate".`);
     process.exit(1);
   }
 
