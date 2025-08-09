@@ -516,19 +516,15 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $description?: string | undefined;
     $extensions?: Record<string, any> | undefined;
 }>]>, z.ZodObject<{
-    $type: z.ZodOptional<z.ZodEnum<["color", "dimension", "fontFamily", "fontWeight", "duration", "cubicBezier", "number", "strokeStyle", "border", "transition", "shadow", "gradient", "typography"]>>;
+    $value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodObject<{}, "passthrough", z.ZodTypeAny, z.objectOutputType<{}, z.ZodTypeAny, "passthrough">, z.objectInputType<{}, z.ZodTypeAny, "passthrough">>]>;
     $description: z.ZodOptional<z.ZodString>;
     $extensions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-} & {
-    $value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodObject<{}, "passthrough", z.ZodTypeAny, z.objectOutputType<{}, z.ZodTypeAny, "passthrough">, z.objectInputType<{}, z.ZodTypeAny, "passthrough">>]>;
-}, "strip", z.ZodTypeAny, {
+}, "strict", z.ZodTypeAny, {
     $value: string | number | z.objectOutputType<{}, z.ZodTypeAny, "passthrough">;
-    $type?: "number" | "color" | "dimension" | "fontFamily" | "fontWeight" | "duration" | "cubicBezier" | "strokeStyle" | "border" | "transition" | "shadow" | "gradient" | "typography" | undefined;
     $description?: string | undefined;
     $extensions?: Record<string, any> | undefined;
 }, {
     $value: string | number | z.objectInputType<{}, z.ZodTypeAny, "passthrough">;
-    $type?: "number" | "color" | "dimension" | "fontFamily" | "fontWeight" | "duration" | "cubicBezier" | "strokeStyle" | "border" | "transition" | "shadow" | "gradient" | "typography" | undefined;
     $description?: string | undefined;
     $extensions?: Record<string, any> | undefined;
 }>, z.ZodObject<{
@@ -548,7 +544,7 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $extensions?: Record<string, any> | undefined;
 }>]>;
 declare const TokenGroupSchema: z.ZodType<any>;
-export declare const DesignTokensFileSchema: z.ZodType<any, z.ZodTypeDef, any>;
+export declare const DesignTokensFileSchema: z.ZodEffects<z.ZodType<any, z.ZodTypeDef, any>, any, any>;
 export type TokenType = z.infer<typeof TokenTypeSchema>;
 export type BaseToken = z.infer<typeof BaseTokenSchema>;
 export type ColorToken = z.infer<typeof ColorTokenSchema>;

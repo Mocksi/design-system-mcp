@@ -254,6 +254,11 @@ export function isTokenReference(value: unknown): value is TokenReference {
   return TokenReferenceSchema.safeParse(value).success;
 }
 
+// Narrowing helper for tokens that include a $type field
+function tokenHasType(token: Token): token is Token & { $type: TokenType } {
+  return token != null && typeof (token as any).$type === 'string';
+}
+
 // Token file parsing and merging functionality
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -321,11 +326,12 @@ export class TokenFileParser {
       
       if (isToken(value)) {
         const tokenName = currentPath.join('-');
+         const tokenType: TokenType | undefined = tokenHasType(value) ? value.$type : undefined;
         const parsedToken: ParsedToken = {
           name: tokenName,
           path: currentPath,
           value: value.$value,
-          type: value.$type,
+           type: tokenType,
           description: value.$description,
           extensions: value.$extensions,
         };

@@ -339,7 +339,7 @@ Progressive flow: Use after get_category_tokens to get detailed information abou
     }
     getCategoryDescription(category) {
         const descriptions = {
-            colors: 'Color tokens including primitives, semantic colors, and themed variations',
+            colors: 'color tokens including primitives, semantic colors, and themed variations',
             typography: 'Font families, weights, sizes, and composite typography tokens',
             spacing: 'Spacing and sizing tokens for margins, padding, and layout',
             borders: 'Border styles, widths, and composite border tokens',

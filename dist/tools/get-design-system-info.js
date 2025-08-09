@@ -43,6 +43,7 @@ export async function getDesignSystemInfo(args) {
         const nextSteps = [
             'Use get_category_tokens to explore tokens in a specific category',
             'Use get_token_reference to get detailed information about specific tokens',
+            'Copy CSS variables or values to use in your code',
         ];
         if (result.parsedResult.categories.length > 0) {
             const topCategories = result.parsedResult.categories
