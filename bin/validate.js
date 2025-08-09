@@ -25,6 +25,29 @@ function getTokenDirectory() {
   return resolve('./design-system-mcp/tokens');
 }
 
+function getBundledExamplesPath() {
+  // Try to find bundled examples - multiple strategies
+  const possiblePaths = [
+    // Local node_modules (most common)
+    resolve('./node_modules/design-system-mcp/examples/tokens'),
+    // Parent directories for global installs via npx
+    resolve(process.argv[1], '../../examples/tokens'),
+    resolve(process.argv[1], '../../../examples/tokens'),
+    // Current working directory (dev mode)
+    resolve('./examples/tokens'),
+  ];
+  
+  for (const path of possiblePaths) {
+    try {
+      if (existsSync(path)) {
+        return path;
+      }
+    } catch {}
+  }
+  
+  return null;
+}
+
 function findJsonFilesRecursive(dir) {
   const files = [];
   try {
@@ -59,19 +82,38 @@ function collectCategoriesFromJson(obj) {
 
 function main() {
   const dir = getTokenDirectory();
+  let actualDir = dir;
+  let usingBundledExamples = false;
+  
+  // Check if local tokens exist
   if (!existsSync(dir)) {
-    console.log(`Token files found: 0 files in ${dir}`);
-    console.log('Categories discovered: none');
-    console.log('Hint: Copy sample tokens from examples/tokens to ./design-system-mcp/tokens');
-    console.log('Example: cp -r examples/tokens ./design-system-mcp/');
-    process.exit(0);
+    // Try to fallback to bundled examples
+    const bundledPath = getBundledExamplesPath();
+    if (bundledPath) {
+      actualDir = bundledPath;
+      usingBundledExamples = true;
+    } else {
+      console.log(`Token files found: 0 files in ${dir}`);
+      console.log('Categories discovered: none');
+      console.log('');
+      console.log('Next steps:');
+      console.log('- Install the package: npm install design-system-mcp');
+      console.log('- Copy sample tokens: cp -r node_modules/design-system-mcp/examples/tokens ./design-system-mcp/');
+      console.log('- Or set custom path: DESIGN_TOKENS_PATH=./path/to/tokens npx design-system-mcp validate');
+      process.exit(0);
+    }
   }
 
-  const files = findJsonFilesRecursive(dir);
+  const files = findJsonFilesRecursive(actualDir);
   if (files.length === 0) {
-    console.log(`Token files found: 0 files in ${dir}`);
-    console.log('Categories discovered: none');
-    console.log('Hint: Add .json files with W3C Design Tokens to the directory');
+    if (usingBundledExamples) {
+      console.log('⚠️  No bundled examples found');
+      console.log('Package may be corrupted - try reinstalling');
+    } else {
+      console.log(`Token files found: 0 files in ${dir}`);
+      console.log('Categories discovered: none');
+      console.log('Hint: Add .json files with W3C Design Tokens to the directory');
+    }
     process.exit(0);
   }
 
@@ -88,11 +130,24 @@ function main() {
   }
 
   const categoriesList = Array.from(categories).sort();
-  console.log(`Token files found: ${files.length} file${files.length === 1 ? '' : 's'} in ${dir}`);
+  
+  if (usingBundledExamples) {
+    console.log('✓ Using bundled examples (no local tokens found)');
+  }
+  
+  console.log(`✓ Token files found: ${files.length} file${files.length === 1 ? '' : 's'} in ${actualDir.replace(process.cwd(), '.')}`);
+  
   if (categoriesList.length > 0) {
-    console.log(`Categories discovered: ${categoriesList.join(', ')}`);
+    console.log(`✓ Categories discovered: ${categoriesList.join(', ')}`);
   } else {
     console.log('Categories discovered: none');
+  }
+  
+  if (usingBundledExamples) {
+    console.log('');
+    console.log('Next steps:');
+    console.log('- Copy examples: cp -r node_modules/design-system-mcp/examples/tokens ./design-system-mcp/');
+    console.log('- Or point to your tokens: DESIGN_TOKENS_PATH=./path/to/tokens npx design-system-mcp validate');
   }
 }
 
