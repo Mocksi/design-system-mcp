@@ -1,7 +1,6 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/tokens.json",
-  "$type": "color",
-  "primitives": {
+  "colors": {
     "gray": {
       "50": {
         "$value": "#f9fafb",

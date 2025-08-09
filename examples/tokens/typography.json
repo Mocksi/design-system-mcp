@@ -2,27 +2,30 @@
   "$schema": "https://design-tokens.github.io/community-group/format/tokens.json",
   "typography": {
     "fontFamily": {
-      "$type": "fontFamily",
       "sans": {
+        "$type": "fontFamily",
         "$value": ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
         "$description": "Primary sans-serif font stack for UI and body text"
       },
       "serif": {
+        "$type": "fontFamily",
         "$value": ["Charter", "Georgia", "Cambria", "Times New Roman", "Times", "serif"],
         "$description": "Serif font stack for editorial content and headings"
       },
       "mono": {
+        "$type": "fontFamily",
         "$value": ["JetBrains Mono", "Menlo", "Monaco", "Cascadia Code", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Code", "Droid Sans Mono", "Courier New", "monospace"],
         "$description": "Monospace font stack for code blocks and technical content"
       }
     },
     "fontSize": {
-      "$type": "dimension",
       "xs": {
+        "$type": "dimension",
         "$value": "0.75rem",
         "$description": "Extra small text - 12px - for captions and fine print"
       },
       "sm": {
+        "$type": "dimension",
         "$value": "0.875rem",
         "$description": "Small text - 14px - for secondary information"
       },
@@ -31,22 +34,27 @@
         "$description": "Base text size - 16px - for body text"
       },
       "lg": {
+        "$type": "dimension",
         "$value": "1.125rem",
         "$description": "Large text - 18px - for prominent body text"
       },
       "xl": {
+        "$type": "dimension",
         "$value": "1.25rem",
         "$description": "Extra large text - 20px - for small headings"
       },
       "2xl": {
+        "$type": "dimension",
         "$value": "1.5rem",
         "$description": "2X large text - 24px - for medium headings"
       },
       "3xl": {
+        "$type": "dimension",
         "$value": "1.875rem",
         "$description": "3X large text - 30px - for large headings"
       },
       "4xl": {
+        "$type": "dimension",
         "$value": "2.25rem",
         "$description": "4X large text - 36px - for extra large headings"
       },
@@ -60,94 +68,112 @@
       }
     },
     "fontWeight": {
-      "$type": "fontWeight",
       "thin": {
+        "$type": "fontWeight",
         "$value": "100",
         "$description": "Thin font weight for delicate text"
       },
       "extralight": {
+        "$type": "fontWeight",
         "$value": "200",
         "$description": "Extra light font weight"
       },
       "light": {
+        "$type": "fontWeight",
         "$value": "300",
         "$description": "Light font weight for secondary text"
       },
       "normal": {
+        "$type": "fontWeight",
         "$value": "400",
         "$description": "Normal font weight for body text"
       },
       "medium": {
+        "$type": "fontWeight",
         "$value": "500",
         "$description": "Medium font weight for emphasis"
       },
       "semibold": {
+        "$type": "fontWeight",
         "$value": "600",
         "$description": "Semi-bold font weight for strong emphasis"
       },
       "bold": {
+        "$type": "fontWeight",
         "$value": "700",
         "$description": "Bold font weight for headings and strong text"
       },
       "extrabold": {
+        "$type": "fontWeight",
         "$value": "800",
         "$description": "Extra bold font weight for display text"
       },
       "black": {
+        "$type": "fontWeight",
         "$value": "900",
         "$description": "Black font weight for heavy display text"
       }
     },
     "lineHeight": {
-      "$type": "number",
       "none": {
-        "$value": "1",
+        "$type": "number",
+        "$value": 1,
         "$description": "No line height for tight spacing"
       },
       "tight": {
-        "$value": "1.25",
+        "$type": "number",
+        "$value": 1.25,
         "$description": "Tight line height for headings"
       },
       "snug": {
-        "$value": "1.375",
+        "$type": "number",
+        "$value": 1.375,
         "$description": "Snug line height for large text"
       },
       "normal": {
-        "$value": "1.5",
+        "$type": "number",
+        "$value": 1.5,
         "$description": "Normal line height for body text"
       },
       "relaxed": {
-        "$value": "1.625",
+        "$type": "number",
+        "$value": 1.625,
         "$description": "Relaxed line height for comfortable reading"
       },
       "loose": {
-        "$value": "2",
+        "$type": "number",
+        "$value": 2,
         "$description": "Loose line height for very comfortable reading"
       }
     },
     "letterSpacing": {
-      "$type": "dimension",
       "tighter": {
+        "$type": "dimension",
         "$value": "-0.05em",
         "$description": "Tighter letter spacing for large headings"
       },
       "tight": {
+        "$type": "dimension",
         "$value": "-0.025em",
         "$description": "Tight letter spacing for headings"
       },
       "normal": {
+        "$type": "dimension",
         "$value": "0",
         "$description": "Normal letter spacing for body text"
       },
       "wide": {
+        "$type": "dimension",
         "$value": "0.025em",
         "$description": "Wide letter spacing for small caps or labels"
       },
       "wider": {
+        "$type": "dimension",
         "$value": "0.05em",
         "$description": "Wider letter spacing for emphasis"
       },
       "widest": {
+        "$type": "dimension",
         "$value": "0.1em",
         "$description": "Widest letter spacing for maximum spread"
       }

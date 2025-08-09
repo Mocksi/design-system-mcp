@@ -25,7 +25,13 @@ const BaseTokenSchema = z.object({
 // Color token
 const ColorTokenSchema = BaseTokenSchema.extend({
     $type: z.literal('color'),
-    $value: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid hex color'),
+    $value: z.string().refine((val) => {
+        // Accept hex colors, token references, or CSS keywords
+        const isHex = val.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+        const isReference = val.match(/^\{[^}]+\}$/);
+        const isCssKeyword = ['transparent', 'inherit', 'currentColor'].includes(val);
+        return isHex || isReference || isCssKeyword;
+    }, 'Invalid color value - must be hex color, CSS keyword (transparent, inherit), or token reference like {colors.primary}'),
 });
 // Dimension token
 const DimensionTokenSchema = BaseTokenSchema.extend({

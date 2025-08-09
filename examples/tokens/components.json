@@ -5,17 +5,17 @@
       "primary": {
         "background": {
           "$type": "color",
-          "$value": "{semantic.primary.500}",
+          "$value": "{colors.primary.500}",
           "$description": "Primary button background color"
         },
         "backgroundHover": {
           "$type": "color", 
-          "$value": "{semantic.primary.600}",
+          "$value": "{colors.primary.600}",
           "$description": "Primary button hover background color"
         },
         "backgroundActive": {
           "$type": "color",
-          "$value": "{semantic.primary.700}",
+          "$value": "{colors.primary.700}",
           "$description": "Primary button active background color"
         },
         "text": {
@@ -47,22 +47,22 @@
         },
         "backgroundHover": {
           "$type": "color",
-          "$value": "{semantic.neutral.50}",
+          "$value": "{colors.neutral.50}",
           "$description": "Secondary button hover background color"
         },
         "backgroundActive": {
           "$type": "color",
-          "$value": "{semantic.neutral.100}",
+          "$value": "{colors.neutral.100}",
           "$description": "Secondary button active background color"
         },
         "text": {
           "$type": "color",
-          "$value": "{semantic.primary.600}",
+          "$value": "{colors.primary.600}",
           "$description": "Secondary button text color"
         },
         "border": {
           "$type": "color",
-          "$value": "{semantic.primary.300}",
+          "$value": "{colors.primary.300}",
           "$description": "Secondary button border color"
         },
         "borderRadius": {
@@ -90,7 +90,7 @@
       },
       "border": {
         "$type": "color",
-        "$value": "{semantic.neutral.200}",
+        "$value": "{colors.neutral.200}",
         "$description": "Card border color"
       },
       "borderRadius": {
@@ -123,27 +123,27 @@
       },
       "border": {
         "$type": "color",
-        "$value": "{semantic.neutral.300}",
+        "$value": "{colors.neutral.300}",
         "$description": "Input field border color"
       },
       "borderFocus": {
         "$type": "color",
-        "$value": "{semantic.primary.500}",
+        "$value": "{colors.primary.500}",
         "$description": "Input field focus border color"
       },
       "borderError": {
         "$type": "color",
-        "$value": "{semantic.error.500}",
+        "$value": "{colors.error.500}",
         "$description": "Input field error border color"
       },
       "text": {
         "$type": "color",
-        "$value": "{semantic.neutral.800}",
+        "$value": "{colors.neutral.800}",
         "$description": "Input field text color"
       },
       "placeholder": {
         "$type": "color",
-        "$value": "{semantic.neutral.400}",
+        "$value": "{colors.neutral.400}",
         "$description": "Input field placeholder text color"
       },
       "borderRadius": {
@@ -166,66 +166,66 @@
       "success": {
         "background": {
           "$type": "color",
-          "$value": "{semantic.success.50}",
+          "$value": "{colors.success.50}",
           "$description": "Success alert background color"
         },
         "border": {
           "$type": "color",
-          "$value": "{semantic.success.200}",
+          "$value": "{colors.success.200}",
           "$description": "Success alert border color"
         },
         "text": {
           "$type": "color",
-          "$value": "{semantic.success.800}",
+          "$value": "{colors.success.800}",
           "$description": "Success alert text color"
         },
         "icon": {
           "$type": "color",
-          "$value": "{semantic.success.400}",
+          "$value": "{colors.success.400}",
           "$description": "Success alert icon color"
         }
       },
       "error": {
         "background": {
           "$type": "color",
-          "$value": "{semantic.error.50}",
+          "$value": "{colors.error.50}",
           "$description": "Error alert background color"
         },
         "border": {
           "$type": "color",
-          "$value": "{semantic.error.200}",
+          "$value": "{colors.error.200}",
           "$description": "Error alert border color"
         },
         "text": {
           "$type": "color",
-          "$value": "{semantic.error.800}",
+          "$value": "{colors.error.800}",
           "$description": "Error alert text color"
         },
         "icon": {
           "$type": "color",
-          "$value": "{semantic.error.400}",
+          "$value": "{colors.error.400}",
           "$description": "Error alert icon color"
         }
       },
       "warning": {
         "background": {
           "$type": "color",
-          "$value": "{semantic.warning.50}",
+          "$value": "{colors.warning.50}",
           "$description": "Warning alert background color"
         },
         "border": {
           "$type": "color",
-          "$value": "{semantic.warning.200}",
+          "$value": "{colors.warning.200}",
           "$description": "Warning alert border color"
         },
         "text": {
           "$type": "color",
-          "$value": "{semantic.warning.800}",
+          "$value": "{colors.warning.800}",
           "$description": "Warning alert text color"
         },
         "icon": {
           "$type": "color",
-          "$value": "{semantic.warning.400}",
+          "$value": "{colors.warning.400}",
           "$description": "Warning alert icon color"
         }
       },

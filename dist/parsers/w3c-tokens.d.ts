@@ -21,7 +21,7 @@ declare const ColorTokenSchema: z.ZodObject<{
     $extensions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 } & {
     $type: z.ZodLiteral<"color">;
-    $value: z.ZodString;
+    $value: z.ZodEffects<z.ZodString, string, string>;
 }, "strip", z.ZodTypeAny, {
     $type: "color";
     $value: string;
@@ -266,7 +266,7 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $extensions: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 } & {
     $type: z.ZodLiteral<"color">;
-    $value: z.ZodString;
+    $value: z.ZodEffects<z.ZodString, string, string>;
 }, "strip", z.ZodTypeAny, {
     $type: "color";
     $value: string;
