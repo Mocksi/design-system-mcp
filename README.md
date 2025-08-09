@@ -1,49 +1,83 @@
 # Design System MCP
 
-A focused Model Context Protocol server that prevents AI coding assistants from hallucinating design tokens by providing direct access to W3C Design Token JSON files.
+Prevent AI assistants from hallucinating design tokens by giving them read‑only access to your W3C Design Token JSON.
 
-## Quick Start
+[![npm version](https://img.shields.io/npm/v/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![npm downloads](https://img.shields.io/npm/dm/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 
-1. **Install the package:**
-   ```bash
-   npm install -g design-system-mcp
-   ```
+## Try it in 60 seconds (TL;DR)
 
-2. **Copy sample tokens:**
-   - If installed globally via npm:
-     ```bash
-     cp -r $(npm root -g)/design-system-mcp/examples/tokens ./design-system-mcp/
-     ```
-   - If using this repository directly:
-     ```bash
-     cp -r ./examples/tokens ./design-system-mcp/
-     ```
+Prerequisites: Node >= 18
 
-3. **Copy example client configs (optional, for quick start):**
-   ```bash
-   # Claude Code (project root)
-   cp ./examples/mcp-configs/.mcp.json ./
+- Install (no global install required):
+  ```bash
+  npx design-system-mcp validate
+  ```
+  Tip: Validate immediately with bundled sample tokens
+  - macOS/Linux:
+    ```bash
+    DESIGN_TOKENS_PATH=./examples/tokens npx design-system-mcp validate
+    ```
+  - Windows (PowerShell):
+    ```powershell
+    $env:DESIGN_TOKENS_PATH="./examples/tokens"; npx design-system-mcp validate
+    ```
 
-   # Cursor (project)
-   cp ./examples/mcp-configs/.cursor-mcp.json ./.cursor/mcp.json
+- Start the server (same env applies when used by an AI client):
+  ```bash
+  npx design-system-mcp start
+  ```
 
-   # Claude Desktop (copy content into your platform-specific config file)
-   cat ./examples/mcp-configs/claude_desktop_config.json
-   ```
+- Point your AI client at the server (generic MCP client example):
+  ```json
+  {
+    "mcpServers": {
+      "design_system": {
+        "command": "npx",
+        "args": ["design-system-mcp", "start"],
+        "env": { "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens" }
+      }
+    }
+  }
+  ```
+  See client‑specific configs for Claude Code, Cursor, and Claude Desktop below.
 
-4. **Configure your AI client (paths overview):**
-   - **Claude Code**: Add to `.mcp.json` at project root
-   - **Claude Desktop**: Add to your platform's config file
-   - **Cursor**: Add to `~/.cursor/mcp.json` or `.cursor/mcp.json`
+## Why this exists
 
-5. **Test the setup:**
-   ```bash
-   npx design-system-mcp validate
-   ```
-   Or with the bundled samples without copying them:
-   ```bash
-   DESIGN_TOKENS_PATH=./examples/tokens npx design-system-mcp validate
-   ```
+- Ensures AI assistants use your real tokens instead of hallucinating values
+- Normalizes various token sources (Figma Tokens, Style Dictionary, manual JSON) into W3C JSON
+- Adds validation, discovery, and safe read‑only access via the MCP protocol
+
+## Next steps
+
+- Use the bundled examples or copy into a local tokens folder:
+  - Recommended location: `./design-system-mcp/tokens/`
+  - macOS/Linux:
+    ```bash
+    mkdir -p ./design-system-mcp && cp -r ./examples/tokens ./design-system-mcp/
+    ```
+  - Windows (PowerShell):
+    ```powershell
+    New-Item -ItemType Directory -Force -Path ./design-system-mcp | Out-Null
+    Copy-Item -Recurse ./examples/tokens ./design-system-mcp/
+    ```
+
+- Or point to any folder with W3C Design Token JSON:
+  - macOS/Linux:
+    ```bash
+    DESIGN_TOKENS_PATH=./path/to/your/tokens npx design-system-mcp validate
+    ```
+  - Windows (PowerShell):
+    ```powershell
+    $env:DESIGN_TOKENS_PATH="./path/to/your/tokens"; npx design-system-mcp validate
+    ```
+
+## Conventions at a glance
+
+- Format: W3C Design Tokens (community group spec). Aliases use `{path.to.token}`.
+- Structure: one or many `.json` files. Common top‑level keys: `colors`, `typography`, `spacing`, `components`, etc.
+- Discovery: all `.json` under `DESIGN_TOKENS_PATH` are merged by category.
+
+Jump to: Usage · Token File Format · Client configs (Claude Code · Cursor · Claude Desktop) · Troubleshooting · FAQ · Contributing
 
 ## MCP Client Configuration
 
@@ -295,6 +329,44 @@ The validate command will show specific errors:
 ```
 colors.json line 15: Missing required '$type' field for token 'primary-500'
 ```
+
+## FAQ
+
+### Where do my tokens go?
+Default: `./design-system-mcp/tokens/`. Or set `DESIGN_TOKENS_PATH` to any folder with W3C Design Token JSON files.
+
+### Do I need Figma Tokens or Style Dictionary?
+No. Any valid W3C Design Token JSON works. Those tools are just convenient producers.
+
+### Can I split tokens across multiple files?
+Yes. All `.json` files under `DESIGN_TOKENS_PATH` are discovered and merged by category.
+
+### How do aliases work?
+Use `{path.to.token}` in `"$value"`. Aliases can be resolved when returning category/token data.
+
+### How do I test without copying tokens?
+Run with the bundled examples:
+```bash
+DESIGN_TOKENS_PATH=./examples/tokens npx design-system-mcp validate
+```
+
+## Contributing
+
+1. Node >= 18
+2. Install dependencies:
+   ```bash
+   npm i
+   ```
+3. Run tests and typecheck:
+   ```bash
+   npm run test
+   npm run build
+   ```
+4. Dev loop:
+   ```bash
+   npm run dev
+   ```
+5. Open a PR with a clear description and tests for changes.
 
 ## License
 
