@@ -67,10 +67,11 @@ function main() {
     console.log('Categories discovered: none');
     console.log('');
     console.log('Next steps:');
-    console.log('1. Initialize sample tokens: npx design-system-mcp init');
-    console.log('2. Run validation again: npx design-system-mcp validate');
+    console.log('1. Install: npm install -g design-system-mcp');
+    console.log('2. Initialize sample tokens: design-system-mcp init');
+    console.log('3. Run validation: design-system-mcp validate');
     console.log('');
-    console.log('Or use custom path: DESIGN_TOKENS_PATH=./path/to/tokens npx design-system-mcp validate');
+    console.log('Or use custom path: DESIGN_TOKENS_PATH=./path/to/tokens design-system-mcp validate');
     process.exit(0);
   }
 

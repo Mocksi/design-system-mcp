@@ -8,20 +8,11 @@ import { existsSync, mkdirSync, cpSync } from 'fs';
 import { resolve, join } from 'path';
 
 function findExamplesPath() {
-  // Simple strategy - look for examples relative to this script and start.js
-  const possiblePaths = [
-    // From start.js calling init.js - look relative to project root
-    resolve(process.argv[1], '../../examples/tokens'),
-    resolve(process.argv[1], '../examples/tokens'), 
-    // Local development - from project root
-    resolve('./examples/tokens'),
-    resolve('../examples/tokens'),
-  ];
+  // Simple: examples are bundled with the installed package
+  const examplesPath = resolve(process.argv[1], '../examples/tokens');
   
-  for (const path of possiblePaths) {
-    if (existsSync(path)) {
-      return path;
-    }
+  if (existsSync(examplesPath)) {
+    return examplesPath;
   }
   
   return null;
@@ -34,13 +25,10 @@ function main() {
   if (!examplesPath) {
     console.log('❌ Could not find sample tokens');
     console.log('');
-    console.log('This might happen if:');
-    console.log('- Package installation is corrupted');
-    console.log('- Running from an unsupported location');
+    console.log('Please install the package first:');
+    console.log('  npm install -g design-system-mcp');
     console.log('');
-    console.log('Try:');
-    console.log('- Reinstall: npm install -g design-system-mcp');
-    console.log('- Or manually create tokens directory and add your own W3C Design Token JSON files');
+    console.log('Then run: design-system-mcp init');
     process.exit(1);
   }
   
@@ -48,7 +36,7 @@ function main() {
     console.log('✓ Token directory already exists at ./design-system-mcp/tokens/');
     console.log('');
     console.log('Next step:');
-    console.log('  npx design-system-mcp validate');
+    console.log('  design-system-mcp validate');
     process.exit(0);
   }
   
@@ -63,7 +51,7 @@ function main() {
     console.log('✓ Ready to test!');
     console.log('');
     console.log('Next steps:');
-    console.log('  npx design-system-mcp validate    # Test the setup');
+    console.log('  design-system-mcp validate    # Test the setup');
     console.log('  # Replace sample tokens with your own W3C Design Token JSON files');
     
   } catch (error) {

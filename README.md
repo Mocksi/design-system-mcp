@@ -6,13 +6,18 @@ Prevent AI assistants from hallucinating design tokens by giving them read‑onl
 
 [![npm version](https://img.shields.io/npm/v/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![npm downloads](https://img.shields.io/npm/dm/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 
-## 🚀 Try it in 60 seconds (TL;DR)
+## 🚀 Setup (2 minutes)
 
 **Requirements:** Node >= 18 • Compatible with Claude Code, Cursor, Claude Desktop
 
-1. **Initialize sample tokens:**
+1. **Install:**
    ```bash
-   npx design-system-mcp init
+   npm install -g design-system-mcp
+   ```
+
+2. **Initialize sample tokens:**
+   ```bash
+   design-system-mcp init
    ```
    Output:
    ```
@@ -20,9 +25,9 @@ Prevent AI assistants from hallucinating design tokens by giving them read‑onl
    ✓ Ready to test!
    ```
 
-2. **Validate the setup:**
+3. **Validate the setup:**
    ```bash
-   npx design-system-mcp validate
+   design-system-mcp validate
    ```
    Output:
    ```
@@ -30,16 +35,7 @@ Prevent AI assistants from hallucinating design tokens by giving them read‑onl
    ✓ Categories discovered: colors, typography, spacing, components
    ```
 
-**Using your own tokens:**
-```bash
-# Point to any folder with W3C Design Token JSON files
-DESIGN_TOKENS_PATH=./path/to/tokens npx design-system-mcp validate
-```
-
-- Start the server (same env applies when used by an AI client):
-  ```bash
-  npx design-system-mcp start
-  ```
+4. **Configure your AI client** (see MCP Client Configuration below)
 
 - Point your AI client at the server (generic MCP client example):
   ```json
@@ -89,7 +85,7 @@ After testing with sample tokens, replace them with your design system:
 
 2. **Validate your tokens:**
    ```bash
-   npx design-system-mcp validate
+   design-system-mcp validate
    ```
 
 3. **Configure your AI client** (see MCP Client Configuration section below)
@@ -335,22 +331,22 @@ Minimal examples:
 
 | Command | Purpose |
 |---------|---------|
-| `npx design-system-mcp init` | Copy sample tokens to ./design-system-mcp/tokens/ |
-| `npx design-system-mcp validate` | Check token files are valid W3C format and discoverable |
-| `npx design-system-mcp start` | Start the MCP server (used by AI clients) |
+| `design-system-mcp init` | Copy sample tokens to ./design-system-mcp/tokens/ |
+| `design-system-mcp validate` | Check token files are valid W3C format and discoverable |
+| `design-system-mcp start` | Start the MCP server (used by AI clients) |
 
 ### Command Examples
 
 **Initialize sample tokens:**
 ```bash
-$ npx design-system-mcp init
+$ design-system-mcp init
 ✓ Copied sample tokens to ./design-system-mcp/tokens/
 ✓ Ready to test!
 ```
 
 **Validate token setup:**
 ```bash
-$ npx design-system-mcp validate
+$ design-system-mcp validate
 ✓ Token files found: 5 files in ./design-system-mcp/tokens
 ✓ Categories discovered: colors, typography, spacing, components
 ```
