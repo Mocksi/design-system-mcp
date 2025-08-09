@@ -6,50 +6,61 @@ Prevent AI assistants from hallucinating design tokens by giving them read‑onl
 
 [![npm version](https://img.shields.io/npm/v/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![npm downloads](https://img.shields.io/npm/dm/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 
-## 🚀 Setup (2 minutes)
+## 🚀 Getting Started
 
 **Requirements:** Node >= 18 • Compatible with Claude Code, Cursor, Claude Desktop
 
-1. **Install:**
-   ```bash
-   npm install -g design-system-mcp
-   ```
+### 1. Install
 
-2. **Initialize sample tokens:**
-   ```bash
-   design-system-mcp init
-   ```
-   Output:
-   ```
-   ✓ Copied sample tokens to ./design-system-mcp/tokens/
-   ✓ Ready to test!
-   ```
+```bash
+npm install -g design-system-mcp
+```
 
-3. **Validate the setup:**
-   ```bash
-   design-system-mcp validate
-   ```
-   Output:
-   ```
-   ✓ Token files found: 5 files in ./design-system-mcp/tokens
-   ✓ Categories discovered: colors, typography, spacing, components
-   ```
+### 2. Export your tokens (W3C format)
 
-4. **Configure your AI client** (see MCP Client Configuration below)
+Export your design tokens to W3C Design Token JSON format and place them in a folder:
+```
+[your-path]/tokens/
+├── colors-primitives.json
+├── colors-semantic.json
+├── typography.json
+├── spacing.json
+└── components.json
+```
 
-- Point your AI client at the server (generic MCP client example):
-  ```json
-  {
-    "mcpServers": {
-      "design_system": {
-        "command": "npx",
-        "args": ["design-system-mcp", "start"],
-        "env": { "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens" }
-      }
+**Don't have tokens yet?** Initialize with sample tokens:
+```bash
+npx design-system-mcp init
+```
+
+### 3. Validate your tokens
+
+Make sure your tokens can be read:
+```bash
+DESIGN_TOKENS_PATH=./your-tokens-directory npx design-system-mcp validate
+```
+Expected output:
+```
+✓ Token files found: 5 files in [your-path]/tokens
+✓ Categories discovered: colors, typography, spacing, components
+```
+
+### 4. Hook up the MCP
+
+Configure your AI client to use your token path. See [MCP Setup Guide](./MCP-SETUP.md) for detailed configurations.
+
+Quick example:
+```json
+{
+  "mcpServers": {
+    "design_system": {
+      "command": "npx",
+      "args": ["design-system-mcp", "start"],
+      "env": { "DESIGN_TOKENS_PATH": "./your-tokens-directory" }
     }
   }
-  ```
-  See client‑specific configs for Claude Code, Cursor, and Claude Desktop below.
+}
+```
 
 ## 📦 Installation
 
@@ -75,20 +86,6 @@ Both methods work with `npx design-system-mcp` - no difference in usage.
 - Normalizes various token sources (Figma Tokens, Style Dictionary, manual JSON) into W3C JSON
 - Adds validation, discovery, and safe read‑only access via the MCP protocol
 
-## Next steps
-
-After testing with sample tokens, replace them with your design system:
-
-1. **Replace sample tokens:**
-   - Put your W3C Design Token JSON files in `./design-system-mcp/tokens/`
-   - Or use `DESIGN_TOKENS_PATH=./your/tokens` to point elsewhere
-
-2. **Validate your tokens:**
-   ```bash
-   design-system-mcp validate
-   ```
-
-3. **Configure your AI client** (see MCP Client Configuration section below)
 
 ## 📄 Token File Format
 
@@ -96,9 +93,9 @@ This MCP server works with **W3C Design Token JSON** files. Place your token fil
 
 ### File Structure
 ```
-design-system-mcp/tokens/
+[your-path]/tokens/
 ├── colors-primitives.json
-├── colors-semantic.json  
+├── colors-semantic.json
 ├── typography.json
 ├── spacing.json
 └── components.json
@@ -130,59 +127,7 @@ design-system-mcp/tokens/
 - **Discovery**: All `.json` files under `DESIGN_TOKENS_PATH` are merged by category
 - **Aliases**: Reference other tokens with `{path.to.token}` syntax (e.g., `"$value": "{colors.primary.500}"`)
 
----
-
-## ⚙️ MCP Client Configuration
-
-### Claude Code
-Create `.mcp.json` at your project root:
-```json
-{
-  "mcpServers": {
-    "design_system": {
-      "command": "npx",
-      "args": ["design-system-mcp", "start"],
-      "env": {
-        "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens"
-      }
-    }
-  }
-}
-```
-
-### Claude Desktop
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`  
-**Linux**: `~/.config/Claude/claude_desktop_config.json`
-```json
-{
-  "mcpServers": {
-    "design_system": {
-      "command": "npx",
-      "args": ["design-system-mcp", "start"],
-      "env": {
-        "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens"
-      }
-    }
-  }
-}
-```
-
-### Cursor
-Add to `~/.cursor/mcp.json` or project `.cursor/mcp.json`:
-```json
-{
-  "mcpServers": {
-    "design_system": {
-      "command": "npx",
-      "args": ["design-system-mcp", "start"],
-      "env": {
-        "DESIGN_TOKENS_PATH": "./design-system-mcp/tokens"
-      }
-    }
-  }
-}
-```
+For detailed MCP setup instructions for different AI clients, see [MCP Setup Guide](./MCP-SETUP.md).
 
 ## 💬 Usage Examples
 
@@ -237,7 +182,7 @@ Ready to use your real tokens? Here's how:
 
 **Example with custom path:**
 ```bash
-DESIGN_TOKENS_PATH=./path/to/your/tokens npx design-system-mcp validate
+DESIGN_TOKENS_PATH=./your-tokens-directory npx design-system-mcp validate
 ```
 
 ### 🗂️ Supported File Layouts
@@ -295,7 +240,6 @@ Minimal examples:
    ```
    ✓ Token files found: 3 files in ./design-system-mcp/tokens
    ✓ Categories discovered: colors, typography, spacing
-   ✓ All tokens have valid W3C format
    ```
 3. **If no tokens found:** Verify the directory exists and contains `.json` files, or set `DESIGN_TOKENS_PATH`
 
@@ -331,22 +275,22 @@ Minimal examples:
 
 | Command | Purpose |
 |---------|---------|
-| `design-system-mcp init` | Copy sample tokens to ./design-system-mcp/tokens/ |
-| `design-system-mcp validate` | Check token files are valid W3C format and discoverable |
-| `design-system-mcp start` | Start the MCP server (used by AI clients) |
+| `npx design-system-mcp init` | Copy sample tokens to ./design-system-mcp/tokens/ |
+| `npx design-system-mcp validate` | Check token files are valid W3C format and discoverable |
+| `npx design-system-mcp start` | Start the MCP server (used by AI clients) |
 
 ### Command Examples
 
 **Initialize sample tokens:**
 ```bash
-$ design-system-mcp init
+$ npx design-system-mcp init
 ✓ Copied sample tokens to ./design-system-mcp/tokens/
 ✓ Ready to test!
 ```
 
 **Validate token setup:**
 ```bash
-$ design-system-mcp validate
+$ npx design-system-mcp validate
 ✓ Token files found: 5 files in ./design-system-mcp/tokens
 ✓ Categories discovered: colors, typography, spacing, components
 ```
@@ -362,7 +306,7 @@ No tokens found in ./design-system-mcp/tokens/.
 
 **Solutions:**
 - Install the package first: `npm install design-system-mcp`
-- Then copy sample tokens: `cp -r node_modules/design-system-mcp/examples/tokens ./design-system-mcp/`
+- Initialize sample tokens: `npx design-system-mcp init`
 - Or test with built-in examples: `DESIGN_TOKENS_PATH=node_modules/design-system-mcp/examples/tokens npx design-system-mcp validate` (verifies token format)
 
 ### AI client can't connect
