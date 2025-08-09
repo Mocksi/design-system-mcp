@@ -91,21 +91,21 @@ declare const TypographyTokenSchema: z.ZodObject<{
     $type: z.ZodLiteral<"typography">;
     $value: z.ZodObject<{
         fontFamily: z.ZodUnion<[z.ZodString, z.ZodArray<z.ZodString, "many">]>;
-        fontSize: z.ZodString;
+        fontSize: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         fontWeight: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
-        letterSpacing: z.ZodOptional<z.ZodString>;
+        letterSpacing: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
         lineHeight: z.ZodOptional<z.ZodUnion<[z.ZodNumber, z.ZodString]>>;
     }, "strip", z.ZodTypeAny, {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     }, {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -113,8 +113,8 @@ declare const TypographyTokenSchema: z.ZodObject<{
     $value: {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     };
     $description?: string | undefined;
@@ -124,8 +124,8 @@ declare const TypographyTokenSchema: z.ZodObject<{
     $value: {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     };
     $description?: string | undefined;
@@ -364,21 +364,21 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $type: z.ZodLiteral<"typography">;
     $value: z.ZodObject<{
         fontFamily: z.ZodUnion<[z.ZodString, z.ZodArray<z.ZodString, "many">]>;
-        fontSize: z.ZodString;
+        fontSize: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
         fontWeight: z.ZodUnion<[z.ZodNumber, z.ZodString]>;
-        letterSpacing: z.ZodOptional<z.ZodString>;
+        letterSpacing: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
         lineHeight: z.ZodOptional<z.ZodUnion<[z.ZodNumber, z.ZodString]>>;
     }, "strip", z.ZodTypeAny, {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     }, {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -386,8 +386,8 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $value: {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     };
     $description?: string | undefined;
@@ -397,8 +397,8 @@ declare const TokenSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     $value: {
         fontFamily: string | string[];
         fontWeight: string | number;
-        fontSize: string;
-        letterSpacing?: string | undefined;
+        fontSize: string | number;
+        letterSpacing?: string | number | undefined;
         lineHeight?: string | number | undefined;
     };
     $description?: string | undefined;

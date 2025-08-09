@@ -63,9 +63,9 @@ const TypographyTokenSchema = BaseTokenSchema.extend({
     $type: z.literal('typography'),
     $value: z.object({
         fontFamily: z.union([z.string(), z.array(z.string())]),
-        fontSize: z.string(),
+        fontSize: z.union([z.string(), z.number()]), // Allow both string and number
         fontWeight: z.union([z.number(), z.string()]),
-        letterSpacing: z.string().optional(),
+        letterSpacing: z.union([z.string(), z.number()]).optional(), // Allow both string and number
         lineHeight: z.union([z.number(), z.string()]).optional(),
     }),
 });
