@@ -1,12 +1,14 @@
 # Design System MCP
 
-Prevent AI assistants from hallucinating design tokens by giving them read‑only access to your W3C Design Token JSON.
+> 🎨 **Model Context Protocol server that gives AI assistants direct access to your design tokens**
+
+Prevent AI assistants from hallucinating design tokens by giving them read‑only access to your W3C Design Token JSON files. No more `#ff0000` when you have a perfectly good `colors.primary.500` token.
 
 [![npm version](https://img.shields.io/npm/v/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![npm downloads](https://img.shields.io/npm/dm/design-system-mcp)](https://www.npmjs.com/package/design-system-mcp) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![node >= 18](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 
-## Try it in 60 seconds (TL;DR)
+## 🚀 Try it in 60 seconds (TL;DR)
 
-Prerequisites: Node >= 18
+**Requirements:** Node >= 18 • Compatible with Claude Code, Cursor, Claude Desktop
 
 - Install (no global install required):
   ```bash
@@ -41,7 +43,25 @@ Prerequisites: Node >= 18
   ```
   See client‑specific configs for Claude Code, Cursor, and Claude Desktop below.
 
-## Why this exists
+## 📦 Installation
+
+| Method | Command | When to use |
+|--------|---------|-------------|
+| **Project-local** | `npm install design-system-mcp` | Recommended for team projects |
+| **Global** | `npm install -g design-system-mcp` | Personal use across projects |
+
+Both methods work with `npx design-system-mcp` - no difference in usage.
+
+## ✨ Features
+
+- 🚫 **Stop token hallucination** - AI uses your actual design tokens, not made-up values
+- 📁 **Multi-file support** - Merge tokens from multiple JSON files automatically  
+- 🔄 **Token references** - Resolve `{colors.primary}` aliases between tokens
+- ✅ **Validation** - Catch malformed tokens before AI sees them
+- 🔧 **Tool integration** - Works with Figma Tokens, Style Dictionary, manual JSON
+- 🔒 **Read-only access** - AI can discover and use tokens but never modify them
+
+## 🎯 Why this exists
 
 - Ensures AI assistants use your real tokens instead of hallucinating values
 - Normalizes various token sources (Figma Tokens, Style Dictionary, manual JSON) into W3C JSON
@@ -71,15 +91,49 @@ Prerequisites: Node >= 18
     $env:DESIGN_TOKENS_PATH="./path/to/your/tokens"; npx design-system-mcp validate
     ```
 
-## Conventions at a glance
+## 📄 Token File Format
 
-- Format: W3C Design Tokens (community group spec). Aliases use `{path.to.token}`.
-- Structure: one or many `.json` files. Common top‑level keys: `colors`, `typography`, `spacing`, `components`, etc.
-- Discovery: all `.json` under `DESIGN_TOKENS_PATH` are merged by category.
+This MCP server works with **W3C Design Token JSON** files. Place your token files in `./design-system-mcp/tokens/` (or set `DESIGN_TOKENS_PATH`):
 
-Jump to: Usage · Token File Format · Client configs (Claude Code · Cursor · Claude Desktop) · Troubleshooting · FAQ · Contributing
+### File Structure
+```
+design-system-mcp/tokens/
+├── colors-primitives.json
+├── colors-semantic.json  
+├── typography.json
+├── spacing.json
+└── components.json
+```
 
-## MCP Client Configuration
+### Example Token File
+```json
+{
+  "colors": {
+    "primary": {
+      "50": {
+        "$type": "color",
+        "$value": "#eff6ff",
+        "$description": "Primary color light variant"
+      },
+      "500": {
+        "$type": "color", 
+        "$value": "#3b82f6",
+        "$description": "Primary color base"
+      }
+    }
+  }
+}
+```
+
+### Key Conventions
+- **Format**: W3C Design Tokens (community group spec)
+- **Structure**: One or many `.json` files with categories like `colors`, `typography`, `spacing`, `components`
+- **Discovery**: All `.json` files under `DESIGN_TOKENS_PATH` are merged by category
+- **Aliases**: Reference other tokens with `{path.to.token}` syntax (e.g., `"$value": "{colors.primary.500}"`)
+
+---
+
+## ⚙️ MCP Client Configuration
 
 ### Claude Code
 Create `.mcp.json` at your project root:
@@ -131,78 +185,70 @@ Add to `~/.cursor/mcp.json` or project `.cursor/mcp.json`:
 }
 ```
 
-## Usage
+## 💬 Usage Examples
 
-Once configured, your AI assistant can:
+Once configured, your AI assistant has access to your design tokens. Here are some example interactions:
 
-1. **Discover available design tokens:**
-   ```
-   "What colors are available in our design system?"
-   ```
+### 🔍 Discovery
+**You:** "What colors are available in our design system?"  
+**AI:** *Lists all color categories and tokens from your JSON files*
 
-2. **Get specific token details:**
-   ```
-   "Show me the primary-500 color token details"
-   ```
+**You:** "Show me all typography tokens with their values"  
+**AI:** *Displays typography tokens with font families, sizes, weights, etc.*
 
-3. **Build components with real tokens:**
-   ```
-   "Help me create a button using our design system tokens"
-   ```
-
-## Token File Format
-
-This MCP server works with W3C Design Token JSON files. Place your token files in `./design-system-mcp/tokens/`:
-
-```
-design-system-mcp/tokens/
-├── colors-primitives.json
-├── colors-semantic.json
-├── typography.json
-├── spacing.json
-└── components.json
-```
-
-### Example Token File
-```json
-{
-  "colors": {
-    "primary": {
-      "50": {
-        "$type": "color",
-        "$value": "#eff6ff",
-        "$description": "Primary color light variant"
-      },
-      "500": {
-        "$type": "color", 
-        "$value": "#3b82f6",
-        "$description": "Primary color base"
-      }
-    }
-  }
-}
+### 🎨 Component Development
+**You:** "Create a React button component using our design system tokens"  
+**AI:** 
+```jsx
+const Button = ({ variant = 'primary', children }) => (
+  <button 
+    style={{
+      backgroundColor: 'var(--colors-primary-500)', // Uses your actual token
+      color: 'var(--colors-neutral-50)',
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      fontFamily: 'var(--typography-body-fontFamily)',
+      fontSize: 'var(--typography-body-fontSize)',
+      borderRadius: 'var(--radius-md)'
+    }}
+  >
+    {children}
+  </button>
+);
 ```
 
-## Replacing Sample Tokens
+### 🔧 Token Debugging  
+**You:** "What's the exact hex value of our primary-500 color?"  
+**AI:** *Returns the exact value from your token files, e.g., "#3b82f6"*
 
-Use this section when you’re ready to point the MCP at your team’s real tokens.
+**You:** "Are there any typography tokens that reference other tokens?"  
+**AI:** *Shows tokens with `{path.to.token}` references and their resolved values*
 
-### Where to put your tokens
+---
 
-- Default location (recommended): `./design-system-mcp/tokens/`
-- Use a different folder by setting `DESIGN_TOKENS_PATH` in your client config or shell
-  - Example: `DESIGN_TOKENS_PATH=./path/to/your/tokens npx design-system-mcp validate`
+## 🔄 Replacing Sample Tokens
 
-### Supported file layouts
+Ready to use your real tokens? Here's how:
 
-- Single file: `tokens.json` with multiple top‑level categories
-- Multiple files (recommended): one or more files per category, for example:
-  - `colors-primitives.json`, `colors-semantic.json`
-  - `typography.json`
-  - `spacing.json`
-  - `components.json`
+### 📁 Token Location Options
 
-The server automatically discovers all `.json` files under the tokens directory and merges categories.
+| Option | Path | Configuration |
+|--------|------|---------------|
+| **Default** | `./design-system-mcp/tokens/` | No setup needed |
+| **Custom** | Any folder | Set `DESIGN_TOKENS_PATH` env variable |
+
+**Example with custom path:**
+```bash
+DESIGN_TOKENS_PATH=./path/to/your/tokens npx design-system-mcp validate
+```
+
+### 🗂️ Supported File Layouts
+
+| Layout | Example | Benefits |
+|--------|---------|----------|
+| **Single file** | `tokens.json` | Simple for small token sets |
+| **Multiple files** ⭐ | `colors.json`, `typography.json`, `spacing.json` | Better organization, team collaboration |
+
+The server automatically discovers all `.json` files and merges categories.
 
 ### Required format (W3C Design Tokens)
 
@@ -257,61 +303,36 @@ Minimal examples:
 - Optional: references use `{...}` syntax and point to existing tokens
 - Validation shows files and expected categories
 
-## Supported Token Creation Workflows
+---
 
-The MCP reads W3C Design Token JSON from your filesystem. Use any workflow that can output that format.
+## 🔧 Token Creation Workflows
 
-### Figma Tokens / Tokens Studio
+| Tool | Process | Notes |
+|------|---------|-------|
+| **Figma Tokens** | Export → W3C JSON → Copy to tokens folder | Use `{path.to.token}` aliases |
+| **Style Dictionary** | Build → W3C JSON output → Point `DESIGN_TOKENS_PATH` | Keep aliases in output |
+| **Design Token Studio** | Export → W3C JSON → Copy to folder | - |
+| **Manual JSON** | Write JSON files → Follow W3C format | See examples above |
 
-1. Export your tokens as JSON in W3C format
-2. Copy the exported files into your tokens directory (default `./design-system-mcp/tokens/`)
-3. Validate:
-   ```bash
-   npx design-system-mcp validate
-   ```
+### Quick Setup: Figma Tokens
 
-Notes:
-- Use `{path.to.token}` alias syntax to reference other tokens
-- Consider splitting primitives and semantic tokens into separate files
+1. Export your tokens as W3C JSON format
+2. Copy files to `./design-system-mcp/tokens/`
+3. Validate: `npx design-system-mcp validate`
 
-### Style Dictionary
 
-1. Configure your Style Dictionary build to emit plain JSON aligned to W3C keys (`colors`, `typography`, `spacing`, `components`, ...)
-2. Output the build to a target directory, e.g. `./build/tokens`
-3. Point the MCP at that directory via env:
-   ```bash
-   DESIGN_TOKENS_PATH=./build/tokens npx design-system-mcp validate
-   ```
+---
 
-Tips:
-- Keep aliases in output when possible (e.g. `"$value": "{colors.primary}"`)
-- If your output is platform-specific (e.g. CSS/TS), also emit a raw JSON target for the MCP
+## 🛠️ Commands
 
-### Design Token Studio
+| Command | Purpose |
+|---------|---------|
+| `npx design-system-mcp start` | Start the MCP server (used by AI clients) |
+| `npx design-system-mcp validate` | Validate your token setup |
 
-1. Export tokens as W3C JSON
-2. Copy to your tokens directory or point `DESIGN_TOKENS_PATH` to the export location
-3. Validate with the command above
+---
 
-### Manual JSON
-
-1. Create `.json` files with top‑level categories (`colors`, `typography`, `spacing`, `components`, ...)
-2. Follow the minimal examples in this README
-3. Validate and iterate
-
-## Supported Token Creation Workflows
-
-- **Figma Tokens Plugin** → W3C JSON → Design System MCP
-- **Style Dictionary** → W3C JSON → Design System MCP  
-- **Design Token Studio** → W3C JSON → Design System MCP
-- **Manual JSON editing** → W3C JSON → Design System MCP
-
-## Commands
-
-- `npx design-system-mcp start` - Start the MCP server (used by AI clients)
-- `npx design-system-mcp validate` - Validate your token setup
-
-## Troubleshooting
+## 🔍 Troubleshooting
 
 ### No tokens found
 ```
@@ -330,25 +351,36 @@ The validate command will show specific errors:
 colors.json line 15: Missing required '$type' field for token 'primary-500'
 ```
 
-## FAQ
+## ❓ FAQ
 
-### Where do my tokens go?
-Default: `./design-system-mcp/tokens/`. Or set `DESIGN_TOKENS_PATH` to any folder with W3C Design Token JSON files.
+<details>
+<summary><strong>Where do my tokens go?</strong></summary>
+Default: <code>./design-system-mcp/tokens/</code>. Or set <code>DESIGN_TOKENS_PATH</code> to any folder with W3C Design Token JSON files.
+</details>
 
-### Do I need Figma Tokens or Style Dictionary?
+<details>
+<summary><strong>Do I need Figma Tokens or Style Dictionary?</strong></summary>
 No. Any valid W3C Design Token JSON works. Those tools are just convenient producers.
+</details>
 
-### Can I split tokens across multiple files?
-Yes. All `.json` files under `DESIGN_TOKENS_PATH` are discovered and merged by category.
+<details>
+<summary><strong>Can I split tokens across multiple files?</strong></summary>
+Yes. All <code>.json</code> files under <code>DESIGN_TOKENS_PATH</code> are discovered and merged by category.
+</details>
 
-### How do aliases work?
-Use `{path.to.token}` in `"$value"`. Aliases can be resolved when returning category/token data.
+<details>
+<summary><strong>How do aliases work?</strong></summary>
+Use <code>{path.to.token}</code> in <code>"$value"</code>. Aliases can be resolved when returning category/token data.
+</details>
 
-### How do I test without copying tokens?
+<details>
+<summary><strong>How do I test without copying tokens?</strong></summary>
 Run with the bundled examples:
+
 ```bash
 DESIGN_TOKENS_PATH=./examples/tokens npx design-system-mcp validate
 ```
+</details>
 
 ## Contributing
 
